@@ -1,17 +1,6 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
-DEBUG = False
 
-if DEBUG:
-
-    import sys  # pydevd module need to be copied in Kodi\system\python\Lib\pysrc
-    #sys.path.append('H:\Program Files\Kodi\system\Python\Lib\pysrc')
-
-    try:
-        import pydevd  # with the addon script.module.pydevd, only use `import pydevd`
-        pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
-    except ImportError:
-        sys.stderr.write("Error: " + "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
 
 import xbmc
 
