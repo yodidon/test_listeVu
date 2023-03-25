@@ -104,6 +104,7 @@ class cDb(object):
                      "siteurl TEXT, "\
                      "site TEXT, "\
                      "cat TEXT, "\
+                     "icon TEXT, "\
                      "UNIQUE(title_id)"\
                      ");"
         self.dbcur.execute(sql_create)
@@ -240,6 +241,7 @@ class cDb(object):
         if not title:
             return
         cat = meta['cat'] if 'cat' in meta else '1'
+        
         #titledecode = cUtil().CleanName(title)
         #titleWatched = self.str_conv(titledecode)
         title_id = meta['titleWatched']
@@ -247,11 +249,12 @@ class cDb(object):
         title = oInputParameterHandler.getValue('sMovieTitle')
         site = oInputParameterHandler.getValue('sId')
         fav = oInputParameterHandler.getValue('sFav')
+        icon = oInputParameterHandler.getValue('sThumbnail')
         
 
-        ex = 'INSERT or IGNORE INTO watched (title_id, title, siteurl, site, cat, fav) VALUES (?, ?, ?, ?, ?, ?)'
+        ex = 'INSERT or IGNORE INTO watched (title_id, title, siteurl, site, cat, fav, icon) VALUES (?, ?, ?, ?, ?, ?, ?)'
         try:
-            self.dbcur.execute(ex, (title_id, title, siteurl, site, cat, fav))
+            self.dbcur.execute(ex, (title_id, title, siteurl, site, cat, fav, icon))
             self.db.commit()
             VSlog('SQL INSERT watched Successfully')
         except Exception as e:
