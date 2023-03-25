@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 # https://github.com/Kodi-vStream/venom-xbmc-addons
+from more_itertools.more import replace
+DEBUG = False
 
+
+if DEBUG:
+
+    import sys  # pydevd module need to be copied in Kodi\system\python\Lib\pysrc
+    #sys.path.append('H:\Program Files\Kodi\system\Python\Lib\pysrc')
+
+    try:
+        import pydevd  # with the addon script.module.pydevd, only use `import pydevd`
+        pydevd.settrace('localhost', stdoutToServer=True, stderrToServer=True)
+    except ImportError:
+        sys.stderr.write("Error: " + "You must add org.python.pydev.debug.pysrc to your PYTHONPATH.")
 
 import xbmc
 
@@ -108,7 +121,7 @@ class cWatched:
         oOutputParameterHandler.addParameter('sCat', '1')       # films
         oGui.addDir(SITE_IDENTIFIER, 'getWatched', addons.VSlang(30120), 'films.png', oOutputParameterHandler)
 
-        oOutputParameterHandler.addParameter('sCat', '4')       # saisons
+        oOutputParameterHandler.addParameter('sCat', '2')       # saisons
         oGui.addDir(SITE_IDENTIFIER, 'getWatched', '%s/%s' % (self.ADDON.VSlang(30121), self.ADDON.VSlang(30122)), 'series.png', oOutputParameterHandler)
 
         oOutputParameterHandler.addParameter('sCat', '5')       # Divers
@@ -124,9 +137,10 @@ class cWatched:
         catFilter = oInputParameterHandler.getValue('sCat')
         sSite = oInputParameterHandler.getValue('sId') if oInputParameterHandler.exist('sId') else xbmc.getInfoLabel('ListItem.Property(sId)')
         title = oInputParameterHandler.getValue('sMovieTitle') if oInputParameterHandler.exist('sMovieTitle') else xbmc.getInfoLabel('ListItem.Property(sCleanTitle)')
-        meta['cat'] = catFilter
+        #meta['cat'] = catFilter
         #meta['site'] = sSite
-        #meta['title'] = title
+        meta['title'] = title
+       
         
 
         with cDb() as DB:
@@ -158,8 +172,12 @@ class cWatched:
                     site = data['site']
                     function = data['fav']
                     cat = data['cat']
+                    #if cat == '2':
+                        #cat= '4'
+                        #catEp = '2'
                     sSeason = data['season']
                     sTmdbId = data['tmdb_id'] if data['tmdb_id'] != '0' else None
+                    
 
                     if catFilter is not False and cat != catFilter:
                         continue
@@ -182,10 +200,13 @@ class cWatched:
 
                     if cat == '1':
                         oListItem = oGui.addMovie(site, function, title, 'films.png', '', title, oOutputParameterHandler)
-                    elif cat == '4':
+                    elif cat == '2':
                         oListItem = oGui.addSeason(site, function, title, 'series.png', '', title, oOutputParameterHandler)
                     elif cat == '5':
                         oListItem = oGui.addMisc(site, function, title, 'buzz.png', '', title, oOutputParameterHandler)
+                    #elif catEp == '2' :
+                        #oListItem = oGui.addTV(site, function, title, 'series.png', '', title, oOutputParameterHandler)
+                    
                     else:
                         oListItem = oGui.addTV(site, function, title, 'series.png', '', title, oOutputParameterHandler)
 
